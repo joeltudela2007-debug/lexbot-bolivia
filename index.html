@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LEXBOT BOLIVIA | Asistente Jurídico Inteligente</title>
+  <meta name="description" content="Asistente Jurídico Inteligente especializado en el ordenamiento jurídico boliviano. Búsqueda y verificación de jurisprudencia del TCP, TSJ y Tribunal Agroambiental, redacción de documentos y capacitación en IA." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- PDF.js para lectura real de documentos PDF de expedientes -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (typeof pdfjsLib !== "undefined") {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    }
+  </script>
+
+  <!-- Estilos del Sistema LegalTech -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ===================================================================
+       HEADER PRINCIPAL DE LEXBOT BOLIVIA
+       =================================================================== -->
+  <header class="main-header">
+    <div class="header-container">
+      <div class="brand-section" onclick="window.location.reload();" title="Ir al Inicio de LEXBOT">
+        <img src="assets/logo-icon.svg" alt="Escudo LexBot Bolivia" class="brand-logo-img" />
+        <div class="brand-text">
+          <h1>LEXBOT <span class="gold-accent">BOLIVIA</span></h1>
+          <span class="brand-subtitle">Asistente Jurídico Inteligente</span>
+        </div>
+      </div>
+
+      <!-- Barra de navegación por módulos -->
+      <nav class="header-nav">
+        <button class="nav-tab-btn activo" data-vista="chat">
+          <i class="fa-solid fa-comments"></i> Chat Inteligente
+        </button>
+        <button class="nav-tab-btn" data-vista="buscador">
+          <i class="fa-solid fa-magnifying-glass"></i> 1. Buscador
+        </button>
+        <button class="nav-tab-btn" data-vista="verificador">
+          <i class="fa-solid fa-shield-halved"></i> 2. Verificador
+        </button>
+        <button class="nav-tab-btn" data-vista="redactor">
+          <i class="fa-solid fa-pen-nib"></i> 3. Redactor
+        </button>
+        <button class="nav-tab-btn" data-vista="analizador">
+          <i class="fa-solid fa-file-contract"></i> 4. Analizador
+        </button>
+        <button class="nav-tab-btn" data-vista="capacitacion">
+          <i class="fa-solid fa-graduation-cap"></i> 5. Capacitación IA
+        </button>
+      </nav>
+
+      <div class="header-status-badge" title="Conectado al repositorio verificado del TCP, TSJ y Gaceta Oficial">
+        <span class="status-dot"></span>
+        <span>BOLIVIA JURÍDICA</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================
+       CONTENIDO PRINCIPAL
+       =================================================================== -->
+  <main class="app-main">
+
+    <!-- ===============================================================
+         VISTA 1: CHAT CONVERSACIONAL INTELIGENTE
+         =============================================================== -->
+    <section id="vista-chat" class="chat-layout">
+      <div class="chat-header-bar">
+        <div class="chat-info">
+          <h2>LEXBOT BOLIVIA</h2>
+          <span class="motto">“Tecnología inteligente, jurisprudencia verificable y justicia responsable”</span>
+        </div>
+        <button class="btn-secondary-action" id="btn-nuevo-chat">
+          <i class="fa-solid fa-rotate-right"></i> Nueva Consulta
+        </button>
+      </div>
+
+      <!-- Área de mensajes -->
+      <div class="chat-mensajes-container" id="chat-mensajes">
+        <!-- Renderizado dinámicamente por app.js -->
+      </div>
+
+      <!-- Barra de entrada de texto -->
+      <div class="chat-input-bar">
+        <!-- Chips de sugerencias rápidas -->
+        <div class="quick-chips-wrapper" id="quick-chips">
+          <button class="quick-chip" onclick="document.getElementById('input-chat').value='Busca jurisprudencia boliviana sobre el debido proceso'; document.getElementById('btn-enviar-chat').click();">
+            <i class="fa-solid fa-scale-balanced"></i> Debido proceso
+          </button>
+          <button class="quick-chip" onclick="document.getElementById('input-chat').value='¿Existe la Sentencia Constitucional Plurinacional 0123/2022?'; document.getElementById('btn-enviar-chat').click();">
+            <i class="fa-solid fa-circle-check"></i> Verificar SCP 0123/2022
+          </button>
+          <button class="quick-chip" onclick="document.getElementById('input-chat').value='Necesito que me ayudes a redactar un memorial'; document.getElementById('btn-enviar-chat').click();">
+            <i class="fa-solid fa-pen"></i> Redactar memorial
+          </button>
+          <button class="quick-chip" onclick="document.getElementById('input-chat').value='Encontré una sentencia en ChatGPT. ¿Puedo copiarla directamente en mi memorial?'; document.getElementById('btn-enviar-chat').click();">
+            <i class="fa-solid fa-robot"></i> Cita de ChatGPT
+          </button>
+          <button class="quick-chip" onclick="document.getElementById('input-chat').value='Auto Supremo relacionado con incumplimiento de contrato'; document.getElementById('btn-enviar-chat').click();">
+            <i class="fa-solid fa-handshake-slash"></i> Incumplimiento de contrato
+          </button>
+        </div>
+
+        <div class="input-group-chat">
+          <input 
+            type="text" 
+            id="input-chat" 
+            class="input-chat-box" 
+            placeholder="Escribe tu consulta jurídica aquí…" 
+            autocomplete="off"
+          />
+          <button id="btn-enviar-chat" class="btn-enviar-chat" title="Enviar consulta">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         VISTA 2: MÓDULO 1 - BUSCADOR DE JURISPRUDENCIA BOLIVIANA
+         =============================================================== -->
+    <section id="vista-buscador" class="seccion-modulo oculto">
+      <div class="seccion-modulo-header">
+        <h2><i class="fa-solid fa-magnifying-glass"></i> Módulo 1: Buscador de Jurisprudencia Boliviana</h2>
+        <p>Búsqueda multidimensional indexada: Palabras clave, materias, número de resolución, artículos de la CPE y leyes, hechos de casos y fundamentación jurídica relevante.</p>
+      </div>
+
+      <!-- Filtros de búsqueda -->
+      <div class="panel-filtros-buscador">
+        <div class="grid-filtros">
+          <div class="form-group">
+            <label for="buscador-termino">Término, Hecho o Problema Jurídico:</label>
+            <input type="text" id="buscador-termino" class="form-control" placeholder="Ej: debido proceso, notificaciones, incumplimiento de contrato, prescripción..." />
+          </div>
+
+          <div class="form-group">
+            <label for="buscador-organo">Órgano Jurisdiccional:</label>
+            <select id="buscador-organo" class="form-control">
+              <option value="todos">Todos los Órganos</option>
+              <option value="Tribunal Constitucional Plurinacional">Tribunal Constitucional (TCP)</option>
+              <option value="Tribunal Supremo de Justicia">Tribunal Supremo (TSJ)</option>
+              <option value="Tribunal Agroambiental">Tribunal Agroambiental (TA)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="buscador-materia">Materia Jurídica:</label>
+            <select id="buscador-materia" class="form-control">
+              <option value="todas">Todas las materias</option>
+              <option value="Constitucional">Constitucional</option>
+              <option value="Civil">Civil y Comercial</option>
+              <option value="Penal">Penal</option>
+              <option value="Laboral">Laboral / Social</option>
+              <option value="Familia">Familia</option>
+              <option value="Agroambiental">Agroambiental</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="buscador-anio">Año de Emisión:</label>
+            <select id="buscador-anio" class="form-control">
+              <option value="todos">Todos los años</option>
+              <option value="2022">2022</option>
+              <option value="2021">2021</option>
+              <option value="2020">2020</option>
+              <option value="2019">2019</option>
+              <option value="2018">2018</option>
+              <option value="2017">2017</option>
+              <option value="2016">2016</option>
+              <option value="2015">2015</option>
+              <option value="2014">2014</option>
+              <option value="2012">2012</option>
+              <option value="2010">2010</option>
+            </select>
+          </div>
+
+          <button id="btn-ejecutar-busqueda" class="btn-primary-action">
+            <i class="fa-solid fa-search"></i> Buscar
+          </button>
+        </div>
+      </div>
+
+      <div class="contador-barra" id="contador-resultados">
+        Inicie una búsqueda o aplique filtros para consultar resoluciones oficiales.
+      </div>
+
+      <!-- Contenedor de resultados estructurados (Fichas de 9 puntos) -->
+      <div class="resultados-list-grid" id="buscador-resultados">
+        <!-- Renderizado dinámicamente -->
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         VISTA 3: MÓDULO 2 - VERIFICADOR DE JURISPRUDENCIA
+         =============================================================== -->
+    <section id="vista-verificador" class="seccion-modulo oculto">
+      <div class="seccion-modulo-header">
+        <h2><i class="fa-solid fa-shield-halved"></i> Módulo 2: Verificador de Jurisprudencia</h2>
+        <p>Comprueba la autenticidad de citas judiciales, detecta alucinaciones de IA y clasifica en: <strong>VERIFICADA</strong>, <strong>NO VERIFICADA</strong> o <strong>DATOS INCONSISTENTES</strong>.</p>
+      </div>
+
+      <div class="verificador-box-container">
+        <!-- Panel Izquierdo: Entrada y Ejemplos -->
+        <div class="panel-verificador-input">
+          <div class="form-group">
+            <label for="verificador-input">Referencia o Cita Jurisprudencial a Comprobar:</label>
+            <input 
+              type="text" 
+              id="verificador-input" 
+              class="form-control" 
+              placeholder="Ej: SCP 0112/2012, Auto Supremo 450/2016, SCP 0123/2022..." 
+            />
+          </div>
+
+          <div class="form-group" style="margin-top: 14px;">
+            <label for="verificador-argumento">Argumento que Pretende Respaldar (Opcional):</label>
+            <textarea 
+              id="verificador-argumento" 
+              class="form-control" 
+              rows="3" 
+              placeholder="Ej: 'Sustentar que la falta de motivación o notificación por cédula defectuosa acarrea nulidad procesal absoluta...'"
+            ></textarea>
+          </div>
+
+          <button id="btn-ejecutar-verificacion" class="btn-primary-action" style="margin-top: 16px; width: 100%; justify-content: center;">
+            <i class="fa-solid fa-check-double"></i> Contrastar con Fuentes Oficiales
+          </button>
+
+          <!-- Ejemplos rápidos de prueba -->
+          <div class="verif-ejemplos-box">
+            <h5>Consultas de Prueba Inmediatas:</h5>
+            <div class="chips-ejemplos-verif">
+              <button class="btn-ejemplo-verif" data-ejemplo="¿Existe la Sentencia Constitucional Plurinacional 0123/2022?">
+                <i class="fa-solid fa-triangle-exclamation"></i> ¿Existe la SCP 0123/2022? (Alucinación frecuente de IA)
+              </button>
+              <button class="btn-ejemplo-verif" data-ejemplo="SCP 0112/2012">
+                <i class="fa-solid fa-circle-check"></i> SCP 0112/2012 (Debido proceso y motivación - Verificada)
+              </button>
+              <button class="btn-ejemplo-verif" data-ejemplo="Auto Supremo Nº 450/2016">
+                <i class="fa-solid fa-circle-check"></i> Auto Supremo Nº 450/2016 (Incumplimiento civil - Verificada)
+              </button>
+              <button class="btn-ejemplo-verif" data-ejemplo="Corte Constitucional de Colombia Sentencia C-037/1996">
+                <i class="fa-solid fa-earth-americas"></i> Sentencia C-037 de Colombia (Detección de jurisprudencia foránea)
+              </button>
+              <button class="btn-ejemplo-verif" data-ejemplo="Sentencia Constitucional 9999/2025">
+                <i class="fa-solid fa-circle-question"></i> Sentencia 9999/2025 (Inexistente / No verificada)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel Derecho: Informe de Verificación Tripartito -->
+        <div id="verificador-resultado-box" class="oculto">
+          <!-- Renderizado dinámicamente -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         VISTA 4: MÓDULO 3 - ASISTENTE DE REDACCIÓN JURÍDICA
+         =============================================================== -->
+    <section id="vista-redactor" class="seccion-modulo oculto">
+      <div class="seccion-modulo-header">
+        <h2><i class="fa-solid fa-pen-nib"></i> Módulo 3: Asistente de Redacción Jurídica</h2>
+        <p>Estructuración forense de memoriales procesales bolivianos con fundamentación normativa y jurisprudencial verificable, optimizador de estilo y exportación a Word.</p>
+      </div>
+
+      <div class="redactor-layout-grid">
+        <!-- Formulario guiado de recopilación -->
+        <div class="panel-formulario-redactor">
+          <div class="form-group">
+            <label for="redactor-tipo-plantilla">Tipo de Documento / Memorial:</label>
+            <select id="redactor-tipo-plantilla" class="form-control">
+              <option value="demanda_civil">Demanda Ordinaria Civil (Cumplimiento de Contrato / Daños)</option>
+              <option value="contestacion_excepciones">Contestación y Excepciones Previas (Art. 128 CPC)</option>
+              <option value="recurso_apelacion">Recurso de Apelación Incidental / Devolutivo</option>
+              <option value="amparo_constitucional">Acción de Amparo Constitucional (Arts. 128-129 CPE)</option>
+              <option value="cesacion_detencion">Solicitud de Cesación de Detención Preventiva (Ley 1173)</option>
+              <option value="memorial_simple">Memorial Genérico de Solicitud o Trámite</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="redactor-autoridad">Autoridad Judicial Competente:</label>
+            <input type="text" id="redactor-autoridad" class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label for="redactor-suma">Suma Procesal:</label>
+            <input type="text" id="redactor-suma" class="form-control" />
+          </div>
+
+          <div class="fila-dos-columnas">
+            <div class="form-group">
+              <label for="redactor-demandante">Parte Actora / Accionante:</label>
+              <input type="text" id="redactor-demandante" class="form-control" placeholder="Nombre completo o iniciales anonimizadas" />
+            </div>
+            <div class="form-group">
+              <label for="redactor-demandado">Parte Demandada / Recurrida:</label>
+              <input type="text" id="redactor-demandado" class="form-control" placeholder="Nombre de la contraparte o autoridad accionada" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="redactor-hechos" style="margin-bottom: 0;">Relación Precisa de los Hechos:</label>
+              <button id="btn-mejorar-texto" class="btn-tool" title="Mejora gramática y terminología jurídica">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Optimizar Lenguaje Forense
+              </button>
+            </div>
+            <textarea id="redactor-hechos" class="form-control" rows="4" placeholder="Expón cronológicamente los antecedentes fácticos sin nombres confidenciales innecesarios..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="redactor-derecho">Fundamentación Jurídica (Normativa Boliviana):</label>
+            <textarea id="redactor-derecho" class="form-control" rows="3" placeholder="Artículos de la CPE, Códigos y leyes bolivianas aplicables..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="redactor-petitorio">Petitorio Concreto (Petitum):</label>
+            <textarea id="redactor-petitorio" class="form-control" rows="3" placeholder="Solicitud clara y categórica de lo que se pide a la autoridad judicial..."></textarea>
+          </div>
+
+          <button id="btn-generar-memorial" class="btn-primary-action" style="justify-content: center;">
+            <i class="fa-solid fa-file-signature"></i> Estructurar y Generar Memorial Formal
+          </button>
+        </div>
+
+        <!-- Panel de Vista Previa y Edición -->
+        <div class="panel-preview-redactor" id="seccion-preview-memorial">
+          <div class="preview-toolbar">
+            <h3><i class="fa-solid fa-file-lines"></i> Borrador Procesal Generado</h3>
+            <div class="toolbar-btns">
+              <button id="btn-copiar-memorial" class="btn-tool"><i class="fa-regular fa-copy"></i> Copiar</button>
+              <button id="btn-descargar-word" class="btn-tool"><i class="fa-regular fa-file-word"></i> Word (.doc)</button>
+              <button id="btn-imprimir-memorial" class="btn-tool"><i class="fa-solid fa-print"></i> Imprimir</button>
+            </div>
+          </div>
+          <textarea id="redactor-preview-text" class="textarea-preview"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         VISTA 5: MÓDULO 4 - ANALIZADOR Y RESUMIDOR DE EXPEDIENTES
+         =============================================================== -->
+    <section id="vista-analizador" class="seccion-modulo oculto">
+      <div class="seccion-modulo-header">
+        <h2><i class="fa-solid fa-file-contract"></i> Módulo 4: Analizador y Resumidor de Expedientes</h2>
+        <p>Carga de expedientes en PDF o texto, resumen ejecutivo, cronología de actuaciones, detección de contradicciones y distinción estricta entre hechos expresos e inferencias.</p>
+      </div>
+
+      <div class="analizador-top-cards">
+        <!-- Carga de Archivo Real (PDF o TXT) -->
+        <div class="card-drop-box" id="dropzone-expediente" onclick="document.getElementById('file-expediente-pdf').click();">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <h4>Cargar Expediente o Resolución (PDF / TXT)</h4>
+          <p>Arrastra aquí tu documento o haz clic para seleccionarlo de tu equipo.</p>
+          <input type="file" id="file-expediente-pdf" accept=".pdf,.txt" style="display: none;" />
+        </div>
+
+        <!-- Expedientes de Muestra para evaluación universitaria inmediata -->
+        <div class="card-muestras-box">
+          <h4><i class="fa-solid fa-folder-open"></i> Expedientes Modelo Bolivianos (Prueba Inmediata):</h4>
+          <div class="muestras-btns-list">
+            <button id="btn-muestra-const" class="btn-muestra-exp">
+              <i class="fa-solid fa-gavel"></i>
+              <div>
+                <strong>Expediente Constitucional (La Paz)</strong>
+                <small style="display: block; color: var(--color-text-muted);">Acción de amparo por notificación defectuosa en domicilio falso</small>
+              </div>
+            </button>
+            <button id="btn-muestra-civil" class="btn-muestra-exp">
+              <i class="fa-solid fa-handshake"></i>
+              <div>
+                <strong>Expediente Ordinario Civil (Santa Cruz)</strong>
+                <small style="display: block; color: var(--color-text-muted);">Resolución de contrato de obra por incumplimiento y mora</small>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Área de Pegar Texto Manual -->
+      <div class="card-pegar-expediente">
+        <label for="texto-pegar-expediente" style="display: block; font-size: 0.82rem; color: var(--color-text-muted); font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">
+          O Pega el Texto de las Actuaciones Procesales:
+        </label>
+        <textarea id="texto-pegar-expediente" class="form-control" rows="5" placeholder="Pega aquí el contenido de la demanda, contestación, informes o autos judiciales..."></textarea>
+        <button id="btn-procesar-texto-expediente" class="btn-primary-action" style="margin-top: 12px;">
+          <i class="fa-solid fa-microchip"></i> Auditar y Resumir Expediente
+        </button>
+      </div>
+
+      <!-- Dashboard de Resultados de Auditoría -->
+      <div id="analizador-resultados-box" class="oculto">
+        <!-- Renderizado dinámicamente -->
+      </div>
+    </section>
+
+    <!-- ===============================================================
+         VISTA 6: MÓDULO 5 - CAPACITACIÓN EN INTELIGENCIA ARTIFICIAL
+         =============================================================== -->
+    <section id="vista-capacitacion" class="seccion-modulo oculto">
+      <div class="seccion-modulo-header">
+        <h2><i class="fa-solid fa-graduation-cap"></i> Módulo 5: Capacitación sobre el Uso de IA en el Derecho</h2>
+        <p>Formación ética, técnicas profesionales de prompting jurídico, prevención de alucinaciones, secreto profesional y simulador práctico.</p>
+      </div>
+
+      <!-- Módulos de estudio didácticos -->
+      <div class="capacitacion-grid-cards" id="capacitacion-temas-grid">
+        <!-- Renderizado dinámicamente -->
+      </div>
+
+      <!-- Detalle de Lección Seleccionada -->
+      <div id="capacitacion-detalle-box" class="oculto"></div>
+
+      <!-- Simulador Interactivo de Prompts Jurídicos -->
+      <div class="simulador-prompt-panel">
+        <div style="margin-bottom: 14px;">
+          <h3><i class="fa-solid fa-terminal"></i> Simulador y Optimizador de Prompts Jurídicos</h3>
+          <p style="color: var(--color-text-muted); font-size: 0.88rem;">Escribe cómo le pedirías una tarea jurídica a una IA y LEXBOT evaluará su formulación bajo la metodología R-C-D-F-R (Rol, Contexto, Datos, Fundamento y Restricciones).</p>
+        </div>
+
+        <div class="form-group">
+          <textarea 
+            id="simulador-prompt-input" 
+            class="form-control" 
+            rows="3" 
+            placeholder="Ej: Necesito que redactes una demanda para desalojar a un inquilino moroso en La Paz..."
+          ></textarea>
+        </div>
+
+        <button id="btn-evaluar-prompt" class="btn-primary-action" style="margin-top: 10px;">
+          <i class="fa-solid fa-chart-simple"></i> Evaluar y Optimizar Prompt
+        </button>
+
+        <div id="simulador-resultado-box" class="oculto"></div>
+      </div>
+
+      <!-- Cuestionario / Quiz de Ética y Verificación Forense -->
+      <div class="quiz-seccion-panel">
+        <h3 style="color: var(--color-white); margin-bottom: 6px;"><i class="fa-solid fa-list-check"></i> Ejercicios Prácticos y Evaluación Forense</h3>
+        <p style="color: var(--color-text-muted); font-size: 0.88rem; margin-bottom: 18px;">Pon a prueba tu criterio profesional identificando alucinaciones algorítmicas y resguardando el secreto profesional.</p>
+
+        <div id="quiz-container">
+          <!-- Renderizado dinámicamente -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================
+       MODAL DE FICHA JURISPRUDENCIAL COMPLETA (9 PUNTOS)
+       =================================================================== -->
+  <div id="modal-ficha-juris" class="modal-overlay oculto">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="btn-cerrar-modal-ficha"><i class="fa-solid fa-xmark"></i></button>
+      <div id="modal-ficha-body"></div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       FOOTER OFICIAL
+       =================================================================== -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div>
+        <strong>LEXBOT BOLIVIA</strong> &copy; 2026. Proyecto Legal Tech Especializado en el Ordenamiento Jurídico Boliviano.
+      </div>
+      <div class="footer-motto">
+        “La inteligencia artificial debe ser una herramienta de apoyo para el abogado, nunca un sustituto de su conocimiento, criterio jurídico y responsabilidad profesional”.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts de Datos y Módulos -->
+  <script src="js/data/jurisprudencia.js"></script>
+  <script src="js/data/normativa.js"></script>
+  <script src="js/data/capacitacion.js"></script>
+  <script src="js/modules/buscador.js"></script>
+  <script src="js/modules/verificador.js"></script>
+  <script src="js/modules/redactor.js"></script>
+  <script src="js/modules/analizador.js"></script>
+  <script src="js/modules/capacitador.js"></script>
+  <script src="js/modules/chat.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
